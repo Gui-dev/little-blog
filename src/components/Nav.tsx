@@ -2,18 +2,9 @@ import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 import { auth } from './../services/firebase'
-import Loading from './Loading'
 
 export const Nav = () => {
   const [user, loading] = useAuthState(auth)
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center">
-        <Loading />
-      </div>
-    )
-  }
 
   return (
     <nav className="flex items-center justify-between py-10">
