@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { FacebookLogo, GoogleLogo } from 'phosphor-react'
-import { signInWithPopup, FacebookAuthProvider, GoogleAuthProvider, signOut } from 'firebase/auth'
+import { signInWithPopup, FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 import { auth } from './../../services/firebase'
@@ -22,7 +22,7 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider)
+      await signInWithPopup(auth, googleProvider)
     } catch (error) {
       console.log(error)
     }
