@@ -31,9 +31,8 @@ const Login = () => {
   const handleFacebookLogin = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider)
-      console.log(result)
     } catch (error) {
-
+      console.log(error)
     }
   }
 
