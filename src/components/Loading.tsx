@@ -4,7 +4,7 @@ const Loading = () => {
   return (
     <Spinner
       weight="bold"
-      className="text-2xl text-pink-300 animate-spin"
+      className="text-2xl text-pink-500 animate-spin"
     />
   )
 }
