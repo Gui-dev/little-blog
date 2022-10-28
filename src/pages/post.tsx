@@ -1,22 +1,33 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { clsx } from 'clsx'
 import { toast } from 'react-toastify'
 
+import { PostProps } from '.'
 import Loading from '../components/Loading'
 import { auth, db } from '../services/firebase'
 
-type PostProps = {
+type CreatePostProps = {
   description: string
 }
 
 const Post = () => {
   const route = useRouter()
   const [user, loading] = useAuthState(auth)
-  const [post, setPost] = useState<PostProps>()
+  const [post, setPost] = useState<CreatePostProps>()
   const [isLoading, setIsLoading] = useState(false)
+  const updateData = route.query as PostProps
+
+  useEffect(() => {
+    if (!user) {
+      route.push('/auth/login')
+    }
+    if (updateData.id) {
+      setPost({ description: updateData.description })
+    }
+  }, [user, route, updateData])
 
   useEffect(() => {
     const getData = async () => {
@@ -48,6 +59,19 @@ const Post = () => {
       }
 
       setIsLoading(true)
+
+      if (updateData.id) {
+        const docRef = doc(db, 'posts', updateData.id)
+        const updatedPost = {
+          ...post,
+          timestamp: serverTimestamp()
+        }
+        await updateDoc(docRef, updatedPost)
+        setPost({ description: '' })
+        toast.info('Post has been updated 🚀🚀🚀')
+        return route.push('/')
+      }
+
       const collectionRef = collection(db, 'posts')
       await addDoc(collectionRef, {
         ...post,
@@ -57,6 +81,7 @@ const Post = () => {
         username: user?.displayName
       })
       setPost({ description: '' })
+      toast.success('Post has been made 🚀🚀🚀')
       route.push('/')
     } catch (error) {
       console.log(error)
@@ -65,11 +90,20 @@ const Post = () => {
     }
   }
 
+  if (loading) {
+    <div className="flex items-center justify-center h-full">
+      <Loading />
+    </div>
+  }
+
   return (
     <section className="flex items-center justify-center my-6 p-12 mx-auto max-w-md rounded-lg shadow-lg">
       <form onSubmit={handleSubmitPost}>
         <h1 className="text-2xl text-zinc-200 font-bold">
-          Create a new post
+          {updateData.id
+            ? 'Edit your post'
+            : 'Create a new post'
+          }
         </h1>
         <div className="py-2">
           <h2 className="text-lg text-zinc-300 font-medium py-2">
@@ -105,7 +139,9 @@ const Post = () => {
           {
             isLoading
               ? <Loading />
-              : 'Submit'
+              : updateData.id
+                ? 'Update'
+                : 'Submit'
           }
         </button>
       </form>
