@@ -5,6 +5,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from './../services/firebase'
 import Loading from '../components/Loading'
 import Message from '../components/Message'
+import Link from 'next/link'
 
 export type PostProps = {
   id: string
@@ -12,21 +13,15 @@ export type PostProps = {
   username: string
   description: string
   avatar: string
-  timestamp: {
-    seconds: number
-    nanoseconds: number
-  }
+  // timestamp: {
+  //   seconds: number
+  //   nanoseconds: number
+  // }
 }
 
 const Home: NextPage = () => {
   const [hasPosts, setHasPosts] = useState(true)
   const [posts, setPosts] = useState<PostProps[]>([])
-
-  useEffect(() => {
-    getPosts()
-  }, [])
-
-  console.log('POSTS: ', posts)
 
   const getPosts = async () => {
     try {
@@ -43,11 +38,11 @@ const Home: NextPage = () => {
               user: data.user,
               username: data.username,
               description: data.description,
-              avatar: data.avatar,
-              timestamp: {
-                seconds: data.timestamp.seconds,
-                nanoseconds: data.timestamp.nanoseconds
-              }
+              avatar: data.avatar
+              // timestamp: {
+              //   seconds: data.timestamp.seconds,
+              //   nanoseconds: data.timestamp.nanoseconds
+              // }
             }
           )
 
@@ -62,6 +57,10 @@ const Home: NextPage = () => {
       setHasPosts(false)
     }
   }
+
+  useEffect(() => {
+    getPosts()
+  }, [])
 
   if (hasPosts) {
     return (
@@ -78,7 +77,9 @@ const Home: NextPage = () => {
       {posts.map(post => {
         return (
           <Message key={post.id} post={post}>
-
+            <Link href={{ pathname: `/${post.id}`, query: post }}>
+              <a>comments</a>
+            </Link>
           </Message>
         )
       })}
