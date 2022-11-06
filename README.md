@@ -4,10 +4,10 @@
 
 # Screens
 <p align="center">
-  <img alt="Creative Minds" src=".screens/home.png" width="50%">
-  <img alt="Creative Minds" src=".screens/new-post.png" width="50%">
-  <img alt="Creative Minds" src=".screens/comment.png" width="50%">
-  <img alt="Creative Minds" src=".screens/comments.png" width="50%">
+  <img alt="Creative Minds" src=".screens/home.png" width="100%">
+  <img alt="Creative Minds" src=".screens/new-post.png" width="100%">
+  <img alt="Creative Minds" src=".screens/comment.png" width="100%">
+  <img alt="Creative Minds" src=".screens/comments.png" width="100%">
   <img alt="Creative Minds" src=".screens/dashboard.png" width="100%">
 </p>
 
