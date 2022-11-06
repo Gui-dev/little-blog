@@ -13,10 +13,15 @@ export type PostProps = {
   username: string
   description: string
   avatar: string
-  // timestamp: {
-  //   seconds: number
-  //   nanoseconds: number
-  // }
+  comments?: {
+    username: string
+    avatar: string
+    message: string
+    timestamp?: {
+      nanoseconds: number
+      seconds: number
+    }
+  }[]
 }
 
 const Home: NextPage = () => {
@@ -38,11 +43,8 @@ const Home: NextPage = () => {
               user: data.user,
               username: data.username,
               description: data.description,
-              avatar: data.avatar
-              // timestamp: {
-              //   seconds: data.timestamp.seconds,
-              //   nanoseconds: data.timestamp.nanoseconds
-              // }
+              avatar: data.avatar,
+              comments: data.comments
             }
           )
 
@@ -62,6 +64,8 @@ const Home: NextPage = () => {
     getPosts()
   }, [])
 
+  console.log(posts)
+
   if (hasPosts) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -77,8 +81,16 @@ const Home: NextPage = () => {
       {posts.map(post => {
         return (
           <Message key={post.id} post={post}>
+            {/* @ts-ignore */}
             <Link href={{ pathname: `/${post.id}`, query: post }}>
-              <a>comments</a>
+              <a className="text-lg font-bold text-zinc-500 hover:text-yellow-500 transition-colors">
+                {
+                  post.comments &&
+                    post.comments?.length > 0
+                    ? post.comments?.length
+                    : '0'
+                } comments
+              </a>
             </Link>
           </Message>
         )

@@ -66,10 +66,6 @@ const Dashboard = () => {
               username: data.username,
               description: data.description,
               avatar: data.avatar
-              // timestamp: {
-              //   seconds: data.timestamp.seconds,
-              //   nanoseconds: data.timestamp.nanoseconds
-              // }
             }
           )
           return setPosts(postsData)
@@ -111,8 +107,8 @@ const Dashboard = () => {
                     : <Trash weight="bold" className="text-2xl" />
                   }
                 </button>
-                <Link
-                  href={{ pathname: '/post', query: post }}
+                {/* @ts-ignore */}
+                <Link href={{ pathname: '/post', query: post }}
                   className="flex items-center justify-center gap-2 py-2"
                 >
                   <a className="text-2xl text-cyan-600 hover:text-cyan-500">
